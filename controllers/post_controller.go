@@ -9,10 +9,10 @@ import (
 )
 
 type PostController struct {
-	postService *service.PostService
+	postService service.PostService
 }
 
-func NewPostController(postService *service.PostService) *PostController {
+func NewPostController(postService service.PostService) *PostController {
 	return &PostController{postService: postService}
 }
 

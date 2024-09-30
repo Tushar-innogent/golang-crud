@@ -6,6 +6,8 @@ import (
 	"go-crud/custom_error"
 	"go-crud/models"
 	"go-crud/repository"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserServiceImpl struct {
@@ -17,6 +19,15 @@ func NewUserServiceImpl(repo repository.UserRepository) UserService {
 }
 
 func (s *UserServiceImpl) CreateUser(user *models.User) (*models.User, error) {
+
+	/// Hash password
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hash)
+
 	result, err := s.repo.Create(user)
 	if err != nil {
 		return nil, err // Ensure this line exists
@@ -77,3 +88,16 @@ func (s *UserServiceImpl) PaginateUsers(page, pageSize int) ([]models.User, erro
 	}
 	return users, nil
 }
+
+func (s *UserServiceImpl) SingleTransactionUser(user *models.User) (*models.User, error) {
+	result, err := s.repo.Create(user)
+	if err != nil {
+		return nil, err // Ensure this line exists
+	}
+	if 0 != 1 {
+
+		return nil, custom_error.ErrUserNotFound
+	}
+	return result, err
+}
+

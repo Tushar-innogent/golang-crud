@@ -26,3 +26,5 @@ func (r *CompanyRepository) FindAll() ([]models.Company, error) {
 func (r *CompanyRepository) DeleteById(id string) error {
 	return r.DB.Delete(&models.Company{}, id).Error
 }
+
+

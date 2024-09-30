@@ -43,3 +43,8 @@ func (m *MockUserRepository) Paginate(offset, pageSize int) ([]models.User, erro
 func (r *MockUserRepository) MultipleUpdateSaveTransaction(user *models.User) (*models.User, error) {
 	return user, nil
 }
+
+func (m *MockUserRepository) FindByEmail(email string) (*models.User, error) {
+	args := m.Called(email)
+	return args.Get(0).(*models.User), nil
+}

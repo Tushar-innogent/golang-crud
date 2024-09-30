@@ -12,4 +12,5 @@ type UserRepository interface {
 	Delete(id string) error
 	Paginate(offset, limit int) ([]models.User, error) 
 	MultipleUpdateSaveTransaction(user *models.User) (*models.User, error)
+	FindByEmail(email string) (*models.User, error)
 }

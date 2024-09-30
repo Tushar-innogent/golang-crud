@@ -35,6 +35,12 @@ func (r *UserRepositoryImpl) FindById(id string) (*models.User, error) {
 	return &user, err
 }
 
+func (r *UserRepositoryImpl) FindByEmail(email string) (*models.User, error) {
+	var user models.User
+	err := r.DB.First(&user, "email = ?", email).Error
+	return &user, err
+}
+
 func (r *UserRepositoryImpl) Update(user *models.User, data map[string]interface{}) error {
 	return r.DB.Model(user).Updates(data).Error
 }

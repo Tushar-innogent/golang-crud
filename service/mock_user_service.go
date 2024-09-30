@@ -40,3 +40,8 @@ func (m *MockUserService) PaginateUsers(page, pageSize int) ([]models.User, erro
 	args := m.Called(page, pageSize)
 	return args.Get(0).([]models.User), args.Error(1)
 }
+
+func (m *MockUserService) SingleTransactionUser(user *models.User) (*models.User, error) {
+	args := m.Called(user)
+	return args.Get(0).(*models.User), args.Error(1)
+}

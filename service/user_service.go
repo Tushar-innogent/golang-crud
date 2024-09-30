@@ -10,4 +10,5 @@ type UserService interface {
 	UpdateUserDetails(user *models.User, data map[string]interface{}) error
 	DeleteUser(id string) error
 	PaginateUsers(page, pageSize int) ([]models.User, error)
+	SingleTransactionUser(user *models.User) (*models.User, error)
 }
