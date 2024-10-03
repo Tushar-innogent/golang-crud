@@ -67,7 +67,7 @@ func RequireAuth(allowedRoles ...string) gin.HandlerFunc {
 		var user models.User
 		initializers.DB.Where("ID=?", claims["sub"]).First(&user)
 		if user.ID == 0 {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Cann't generate token! User not found"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Can't generate token! User not found"})
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
