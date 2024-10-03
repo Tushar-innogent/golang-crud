@@ -53,7 +53,7 @@ func main() {
 	r := gin.Default()
 
 	//Company API's
-	r.POST("/company", middleware.RequireAuth("RoleUser", "RoleAdmin"), companyController.CreateCompany)
+	r.POST("/company", companyController.CreateCompany)
 	r.GET("/getAllCompanies", middleware.RequireAuth("RoleUser", "RoleAdmin"), companyController.GetAllCompanies)
 	r.DELETE("/deleteCompany/:id", middleware.RequireAuth("RoleAdmin"), companyController.DeleteCompany)
 

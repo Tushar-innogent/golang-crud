@@ -1,19 +1,8 @@
 FROM golang:1.23.1-alpine3.20
-# WORKDIR /gocrud
-# COPY . /gocrud
-# RUN go build /gocrud
-# EXPOSE 8081
-# ENTRYPOINT [ "./go-crud" ]
-# CMD [ "./go-crud" ]
-
-# Use a Go image as the base image
-# FROM golang:1.23.1-alpinem
+WORKDIR /gocrud
 
 # Install any required packages (like git for fetching dependencies)
-RUN apk add --no-cache git
-
-# Set the working directory inside the container
-WORKDIR /app
+# RUN apk add --no-cache git
 
 # Copy the Go module files and download dependencies
 COPY go.mod go.sum ./
@@ -23,10 +12,9 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o myapp
-
+RUN go build -o go-app
 # Expose the application port (optional, adjust based on your app)
-EXPOSE 8081
+EXPOSE 8083
 
 # Run the built binary
-CMD ["./myapp"]
+CMD ["./go-app"]

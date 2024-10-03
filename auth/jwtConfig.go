@@ -24,6 +24,5 @@ func GenerateToken(user *models.User) (string, error) {
 		return "", err
 	}
 
-	log.Println("Generated token:", tokenString)
 	return tokenString, nil
 }

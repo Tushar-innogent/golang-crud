@@ -5,6 +5,7 @@ import (
 	"errors"
 	"go-crud/models"
 	"go-crud/repository"
+	"log"
 )
 
 type PostServiceImpl struct {
@@ -16,6 +17,7 @@ func NewPostService(repo *repository.PostRepository) PostService {
 }
 
 func (s *PostServiceImpl) CreatePost(post *models.Post) error {
+	log.Println("Create post function called! post:", post)
 	err := s.repo.Create(post)
 	return handleRepoError(err, "failed to create post")
 }
