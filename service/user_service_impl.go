@@ -101,3 +101,13 @@ func (s *UserServiceImpl) SingleTransactionUser(user *models.User) (*models.User
 	return result, err
 }
 
+func (s *UserServiceImpl) FindByEmail(email string) (*models.User, error){
+	user, err := s.repo.FindByEmail(email)
+	if err != nil {
+		if errors.Is(err, custom_error.ErrUserNotFound) {
+			return nil, fmt.Errorf("user with email %s not found: %w", email, err)
+		}
+		return nil, fmt.Errorf("failed to retrieve user with email %s: %w", email, err)
+	}
+	return user, nil
+}

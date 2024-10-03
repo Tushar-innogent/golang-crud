@@ -11,4 +11,5 @@ type UserService interface {
 	DeleteUser(id string) error
 	PaginateUsers(page, pageSize int) ([]models.User, error)
 	SingleTransactionUser(user *models.User) (*models.User, error)
+	FindByEmail(email string) (*models.User, error)
 }

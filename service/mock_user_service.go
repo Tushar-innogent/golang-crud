@@ -45,3 +45,7 @@ func (m *MockUserService) SingleTransactionUser(user *models.User) (*models.User
 	args := m.Called(user)
 	return args.Get(0).(*models.User), args.Error(1)
 }
+func (m *MockUserService) FindByEmail(email string) (*models.User, error) {
+	args := m.Called(email)
+	return args.Get(0).(*models.User), args.Error(1)
+}

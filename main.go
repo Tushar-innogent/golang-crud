@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-crud/auth"
 	"go-crud/controllers"
 	"go-crud/initializers"
 	"go-crud/middleware"
@@ -26,7 +27,7 @@ func main() {
 	// Initialize database connection
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
-	initializers.ConfigGoth()
+	auth.ConfigGoth()
 
 	// Configure Gothic with your session store
 	gothic.Store = store
@@ -44,7 +45,9 @@ func main() {
 	userService := service.NewUserServiceImpl(userRepo) // Returns an implementation of UserService interface
 	userController := controllers.NewUserController(userService)
 
-	authController := controllers.NewAuthController(userRepo)
+	authController := controllers.NewAuthController(userService)
+
+	gothConfig := auth.NewGothConfig(userService)
 
 	// Create a Gin router
 	r := gin.Default()
@@ -60,7 +63,8 @@ func main() {
 	r.GET("/getPost/:id", middleware.RequireAuth("RoleUser", "RoleAdmin"), postController.GetPostById)
 
 	//Users API's
-	r.POST("/signup", userController.CreateUser)
+	// r.POST("/signup", userController.CreateUser)
+	r.POST("/signup", authController.Signup)
 	r.POST("login", authController.Login)
 
 	//auth/google/callback
@@ -73,9 +77,12 @@ func main() {
 	r.POST("/singleTransac", middleware.RequireAuth("RoleUser", "RoleAdmin"), userController.SingleTransaction)
 
 	r.GET("/", home)
-	r.GET("/auth/:provider", initializers.SignInWithProvider)
-	r.GET("/auth/:provider/callback", initializers.CallbackHandler)
-	r.GET("/success", initializers.Success)
+	r.GET("/auth/:provider", gothConfig.SignInWithProvider)
+	r.GET("/auth/:provider/callback", gothConfig.CallbackHandler)
+	r.GET("/success", gothConfig.Success)
+
+	// r.GET("/auth/github", auth.SignInWithProvider)
+	// r.GET("/auth/github/callback", auth.CallbackHandler)
 
 	r.Run()
 }
@@ -92,3 +99,40 @@ func home(c *gin.Context) {
 		return
 	}
 }
+
+// func beginAuthHandler(c *gin.Context) {
+// 	// Begin the OAuth2 authentication flow
+// 	provider, err := goth.GetProvider("github")
+// 	if err != nil {
+// 		c.String(500, err.Error())
+// 		return
+// 	}
+
+// 	// Redirect the user to the provider's authentication page
+// 	url, err := provider.BeginAuth("state")
+// 	if err != nil {
+// 		c.String(500, err.Error())
+// 		return
+// 	}
+
+// 	c.Redirect(302, url)
+// }
+
+// func callbackHandler(c *gin.Context) {
+// 	// Get the user's information after authentication
+// 	provider, err := goth.GetProvider("github")
+// 	if err != nil {
+// 		c.String(500, err.Error())
+// 		return
+// 	}
+
+// 	// Retrieve the user from the request
+// 	user, err := provider.GetUser(c.Request)
+// 	if err != nil {
+// 		c.String(500, err.Error())
+// 		return
+// 	}
+
+// 	// Display the user's information
+// 	c.JSON(200, user)
+// }

@@ -2,7 +2,6 @@ package test
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"go-crud/controllers"
 	"go-crud/models"
@@ -21,7 +20,7 @@ func setupTestController() (*gin.Engine, *controllers.UserController, *service.M
 	userController := controllers.NewUserController(mockUserService)
 	router := gin.Default()
 
-	router.POST("/user", userController.CreateUser)
+	// router.POST("/user", userController.CreateUser)
 	router.GET("/getUsers", userController.GetUsers)
 	router.GET("/getUserById/:id", userController.GetUserById)
 	router.PUT("/updateUser/:id", userController.UpdateUserDetails)
@@ -33,28 +32,28 @@ func setupTestController() (*gin.Engine, *controllers.UserController, *service.M
 
 // Test cases
 
-func TestCreateUser_Success(t *testing.T) {
-	gin.SetMode(gin.TestMode)
-	router, _, mockUserService := setupTestController()
+// func TestCreateUser_Success(t *testing.T) {
+// 	gin.SetMode(gin.TestMode)
+// 	router, _, mockUserService := setupTestController()
 
-	mockUser := &models.User{Name: "John Doe", Email: "john@example.com"}
-	mockUserService.On("CreateUser", mockUser).Return(mockUser, nil)
+// 	mockUser := &models.User{Name: "John Doe", Email: "john@example.com"}
+// 	mockUserService.On("CreateUser", mockUser).Return(mockUser, nil)
 
-	// Prepare the request payload
-	userPayload, _ := json.Marshal(mockUser)
-	req, _ := http.NewRequest(http.MethodPost, "/user", bytes.NewBuffer(userPayload))
-	req.Header.Set("Content-Type", "application/json")
+// 	// Prepare the request payload
+// 	userPayload, _ := json.Marshal(mockUser)
+// 	req, _ := http.NewRequest(http.MethodPost, "/user", bytes.NewBuffer(userPayload))
+// 	req.Header.Set("Content-Type", "application/json")
 
-	// Create a test HTTP response recorder
-	w := httptest.NewRecorder()
+// 	// Create a test HTTP response recorder
+// 	w := httptest.NewRecorder()
 
-	// Call the handler
-	router.ServeHTTP(w, req)
+// 	// Call the handler
+// 	router.ServeHTTP(w, req)
 
-	// Assert the response
-	assert.Equal(t, http.StatusCreated, w.Code)
-	mockUserService.AssertExpectations(t)
-}
+// 	// Assert the response
+// 	assert.Equal(t, http.StatusCreated, w.Code)
+// 	mockUserService.AssertExpectations(t)
+// }
 
 func TestGetUsers_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
@@ -71,7 +70,6 @@ func TestGetUsers_Success(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	mockUserService.AssertExpectations(t)
 }
-
 
 func TestGetUserById_NotFound(t *testing.T) {
 	gin.SetMode(gin.TestMode)
